@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Loading from "./Loading";
+import NotFound from "./NotFound";
 
 class PhotoGallery extends Component {
   flickrApiKey = process.env.REACT_APP_FLICKR_API_KEY;
@@ -13,22 +14,22 @@ class PhotoGallery extends Component {
   componentDidMount() {
     const search = this.props.match.params.search;
 
-    this.loading = true;
-    this._retrievePhotoData(search).then(photos => {
-      this.loading = false;
-      this.setState({ photos });
-    });
+    this._getPhotos(search);
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.match.params.search !== this.props.match.params.search &&
-      this.props.match.params.search
-    ) {
+    if (prevProps.match.params.search !== this.props.match.params.search) {
       const search = this.props.match.params.search;
+      this._getPhotos(search);
+    }
+  }
 
+  _getPhotos(searchString) {
+    if (!searchString) {
+      this.setState({ photos: [] });
+    } else {
       this.loading = true;
-      this._retrievePhotoData(search).then(photos => {
+      this._retrievePhotoData(searchString).then(photos => {
         this.loading = false;
         this.setState({ photos });
       });
@@ -70,7 +71,7 @@ class PhotoGallery extends Component {
     return photos;
   }
 
-  render() {
+  photoGalleryHtml() {
     return !this.loading ? (
       <ul>
         {this.state.photos.map(photo => {
@@ -83,6 +84,14 @@ class PhotoGallery extends Component {
       </ul>
     ) : (
       <Loading></Loading>
+    );
+  }
+
+  render() {
+    return this.state.photos.length ? (
+      this.photoGalleryHtml()
+    ) : (
+      <NotFound></NotFound>
     );
   }
 }

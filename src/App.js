@@ -2,9 +2,9 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Nav from "./components/Nav";
-import NotFound from "./components/NotFound";
-import Search from "./components/Search";
 import PhotoGallery from "./components/PhotoGallery";
+import Search from "./components/Search";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <div className="photo-container">
           <h2>Results</h2>
           <Switch>
-            <Route path="/:search" component={PhotoGallery} />
+            <Route exact path="/:search?" component={PhotoGallery} />
             <Route path="*" component={NotFound} />
           </Switch>
         </div>
