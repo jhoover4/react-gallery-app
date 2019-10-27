@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Loading from "./Loading";
 
 class PhotoGallery extends Component {
   flickrApiKey = process.env.REACT_APP_FLICKR_API_KEY;
@@ -11,15 +12,24 @@ class PhotoGallery extends Component {
 
   componentDidMount() {
     const search = this.props.match.params.search;
+
+    this.loading = true;
     this._retrievePhotoData(search).then(photos => {
+      this.loading = false;
       this.setState({ photos });
     });
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.match.params.search !== this.props.match.params.search) {
+    if (
+      prevProps.match.params.search !== this.props.match.params.search &&
+      this.props.match.params.search
+    ) {
       const search = this.props.match.params.search;
+
+      this.loading = true;
       this._retrievePhotoData(search).then(photos => {
+        this.loading = false;
         this.setState({ photos });
       });
     }
@@ -61,7 +71,7 @@ class PhotoGallery extends Component {
   }
 
   render() {
-    return (
+    return !this.loading ? (
       <ul>
         {this.state.photos.map(photo => {
           return (
@@ -71,6 +81,8 @@ class PhotoGallery extends Component {
           );
         })}
       </ul>
+    ) : (
+      <Loading></Loading>
     );
   }
 }

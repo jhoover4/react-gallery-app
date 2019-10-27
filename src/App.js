@@ -6,8 +6,6 @@ import NotFound from "./components/NotFound";
 import Search from "./components/Search";
 import PhotoGallery from "./components/PhotoGallery";
 
-import "./App.css";
-
 function App() {
   return (
     <Router>
@@ -19,7 +17,7 @@ function App() {
           <h2>Results</h2>
           <Switch>
             <Route path="/:search" component={PhotoGallery} />
-            <NotFound />
+            <Route path="*" component={NotFound} />
           </Switch>
         </div>
       </div>

@@ -1,10 +1,27 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
 class Search extends Component {
+  handleSubmit = e => {
+    e.preventDefault();
+
+    const searchTerm = this.searchInput.value.toLowerCase();
+
+    this.searchInput.value = "";
+
+    this.props.history.push(`/${searchTerm}`);
+  };
+
   render() {
     return (
-      <form className="search-form">
-        <input type="search" name="search" placeholder="Search" required />
+      <form className="search-form" onSubmit={this.handleSubmit}>
+        <input
+          type="search"
+          name="search"
+          placeholder="Search"
+          required
+          ref={input => (this.searchInput = input)}
+        />
         <button type="submit" className="search-button">
           <svg
             fill="#fff"
@@ -22,4 +39,4 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default withRouter(Search);
